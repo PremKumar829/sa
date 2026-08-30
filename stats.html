@@ -11,72 +11,51 @@
             margin: 0;
             padding: 20px;
             color: #1e293b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
         }
-        .dashboard-container {
-            max-width: 600px;
-            margin: 0 auto;
+        .dashboard-container, .login-box {
+            max-width: 500px;
+            width: 100%;
             background: #ffffff;
             padding: 25px;
             border-radius: 16px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             border: 1px solid #e2e8f0;
+            box-sizing: border-box;
         }
-        h2 { font-size: 20px; margin-top: 0; color: #0f172a; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
-        .stats-grid {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        .stat-card {
-            flex: 1;
-            background: #f8fafc;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid #cbd5e1;
-            text-align: center;
-        }
-        .stat-card h3 { margin: 0; font-size: 13px; color: #64748b; text-transform: uppercase; }
-        .stat-card p { margin: 8px 0 0 0; font-size: 24px; font-weight: 700; color: #2563eb; }
-        .logs-section h3 { font-size: 15px; margin-bottom: 10px; color: #334155; }
-        .log-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            max-height: 300px;
-            overflow-y: auto;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-        }
-        .log-item {
-            padding: 10px 15px;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: 13px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #fff;
-        }
+        .login-box { text-align: center; }
+        #dashboard-sec { display: none; }
+        h2 { font-size: 18px; margin-top: 0; color: #0f172a; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+        .stats-grid { display: flex; gap: 12px; margin-bottom: 20px; }
+        .stat-card { flex: 1; background: #f8fafc; padding: 12px; border-radius: 10px; border: 1px solid #cbd5e1; text-align: center; }
+        .stat-card h3 { margin: 0; font-size: 11px; color: #64748b; text-transform: uppercase; }
+        .stat-card p { margin: 6px 0 0 0; font-size: 20px; font-weight: 700; color: #2563eb; }
+        .logs-section h3 { font-size: 14px; margin-bottom: 8px; color: #334155; }
+        .log-list { list-style: none; padding: 0; margin: 0; max-height: 250px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; }
+        .log-item { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; font-size: 12px; display: flex; justify-content: space-between; align-items: center; background: #fff; }
         .log-item:last-child { border-bottom: none; }
-        .time-tag { color: #64748b; font-size: 11px; background: #f1f5f9; padding: 3px 8px; border-radius: 6px; }
-        .clear-btn {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
-        }
-        .clear-btn:hover { background: #dc2626; }
+        .time-tag { color: #64748b; font-size: 10px; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; }
+        .btn { background: #2563eb; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; }
+        .btn-danger { background: #ef4444; margin-top: 15px; }
+        .input-field { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; box-sizing: border-box; margin-bottom: 10px; outline: none; }
     </style>
 </head>
 <body>
 
-    <div class="dashboard-container">
-        <h2>📊 Real-Time Admin Analytics</h2>
+    <!-- Login Box for Password -->
+    <div id="login-sec" class="login-box">
+        <h2>🔒 Admin Access Protected</h2>
+        <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">Please enter your admin PIN to view stats.</p>
+        <input type="password" id="admin-pass" class="input-field" placeholder="Enter PIN (e.g. 1234)" />
+        <button class="btn" onclick="checkPassword()">Login to Dashboard</button>
+    </div>
+
+    <!-- Main Dashboard Section -->
+    <div id="dashboard-sec" class="dashboard-container">
+        <h2>📊 Live Traffic & Click Dashboard</h2>
         
         <div class="stats-grid">
             <div class="stat-card">
@@ -90,17 +69,28 @@
         </div>
 
         <div class="logs-section">
-            <h3>Recent Click Activity (With Time)</h3>
+            <h3>Recent Click Activity (With Timestamp)</h3>
             <ul id="log-list" class="log-list">
                 <li class="log-item" style="color: #94a3b8; text-align: center; display: block;">No clicks recorded yet.</li>
             </ul>
         </div>
 
-        <button class="clear-btn" onclick="clearData()">Clear All Stats</button>
+        <button class="btn btn-danger" onclick="clearData()">Clear All Stats</button>
     </div>
 
     <script>
-        // Load data from localStorage
+        // Default Password set to '8298' (Aap ise apne hisab se badal sakte hain)
+        function checkPassword() {
+            var pass = document.getElementById('admin-pass').value;
+            if(pass === "1234") {
+                document.getElementById('login-sec').style.display = 'none';
+                document.getElementById('dashboard-sec').style.display = 'block';
+                loadStats();
+            } else {
+                alert("Incorrect PIN! Access Denied.");
+            }
+        }
+
         function loadStats() {
             var visits = localStorage.getItem('total_visits') || 0;
             var clicks = JSON.parse(localStorage.getItem('click_logs') || '[]');
@@ -119,20 +109,18 @@
             clicks.reverse().forEach(function(item) {
                 var li = document.createElement('li');
                 li.className = 'log-item';
-                li.innerHTML = '<span>🚀 User Clicked Receptionist Button</span> <span class="time-tag">' + item + '</span>';
+                li.innerHTML = '<span>🚀 User Clicked Button</span> <span class="time-tag">' + item + '</span>';
                 listEl.appendChild(li);
             });
         }
 
         function clearData() {
-            if(confirm("Are you sure you want to reset all stats?")) {
+            if(confirm("Are you sure you want to reset all data?")) {
                 localStorage.removeItem('total_visits');
                 localStorage.removeItem('click_logs');
                 loadStats();
             }
         }
-
-        loadStats();
     </script>
 </body>
 </html>
