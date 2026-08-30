@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Traffic & Click Dashboard</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f1f5f9;
+            margin: 0;
+            padding: 20px;
+            color: #1e293b;
+        }
+        .dashboard-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+        h2 { font-size: 20px; margin-top: 0; color: #0f172a; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+        .stats-grid {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            flex: 1;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+            text-align: center;
+        }
+        .stat-card h3 { margin: 0; font-size: 13px; color: #64748b; text-transform: uppercase; }
+        .stat-card p { margin: 8px 0 0 0; font-size: 24px; font-weight: 700; color: #2563eb; }
+        .logs-section h3 { font-size: 15px; margin-bottom: 10px; color: #334155; }
+        .log-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+        .log-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+        }
+        .log-item:last-child { border-bottom: none; }
+        .time-tag { color: #64748b; font-size: 11px; background: #f1f5f9; padding: 3px 8px; border-radius: 6px; }
+        .clear-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .clear-btn:hover { background: #dc2626; }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <h2>📊 Real-Time Admin Analytics</h2>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Visits</h3>
+                <p id="visit-count">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Button Clicks</h3>
+                <p id="click-count">0</p>
+            </div>
+        </div>
+
+        <div class="logs-section">
+            <h3>Recent Click Activity (With Time)</h3>
+            <ul id="log-list" class="log-list">
+                <li class="log-item" style="color: #94a3b8; text-align: center; display: block;">No clicks recorded yet.</li>
+            </ul>
+        </div>
+
+        <button class="clear-btn" onclick="clearData()">Clear All Stats</button>
+    </div>
+
+    <script>
+        // Load data from localStorage
+        function loadStats() {
+            var visits = localStorage.getItem('total_visits') || 0;
+            var clicks = JSON.parse(localStorage.getItem('click_logs') || '[]');
+
+            document.getElementById('visit-count').innerText = visits;
+            document.getElementById('click-count').innerText = clicks.length;
+
+            var listEl = document.getElementById('log-list');
+            listEl.innerHTML = '';
+
+            if (clicks.length === 0) {
+                listEl.innerHTML = '<li class="log-item" style="color: #94a3b8; text-align: center; display: block;">No clicks recorded yet.</li>';
+                return;
+            }
+
+            clicks.reverse().forEach(function(item) {
+                var li = document.createElement('li');
+                li.className = 'log-item';
+                li.innerHTML = '<span>🚀 User Clicked Receptionist Button</span> <span class="time-tag">' + item + '</span>';
+                listEl.appendChild(li);
+            });
+        }
+
+        function clearData() {
+            if(confirm("Are you sure you want to reset all stats?")) {
+                localStorage.removeItem('total_visits');
+                localStorage.removeItem('click_logs');
+                loadStats();
+            }
+        }
+
+        loadStats();
+    </script>
+</body>
+</html>
