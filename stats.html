@@ -34,20 +34,24 @@
         .stat-card h3 { margin: 0; font-size: 11px; color: #64748b; text-transform: uppercase; }
         .stat-card p { margin: 6px 0 0 0; font-size: 20px; font-weight: 700; color: #2563eb; }
         
-        /* Unique Graph Section */
-        .graph-section { background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1; margin-bottom: 20px; }
-        .graph-title { font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 10px; text-transform: uppercase; }
-        .graph-bars { display: flex; align-items: flex-end; gap: 8px; height: 100px; border-bottom: 2px solid #cbd5e1; padding-bottom: 5px; }
-        .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; }
-        .bar { width: 100%; background: #2563eb; border-radius: 4px 4px 0 0; transition: height 0.5s ease; min-height: 4px; }
-        .bar-label { font-size: 9px; color: #64748b; margin-top: 5px; }
+        /* Animated Chart Section */
+        .chart-section { background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #cbd5e1; margin-bottom: 20px; }
+        .chart-title { font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 12px; text-transform: uppercase; display: flex; justify-content: space-between; }
+        
+        .progress-bar-container { margin-bottom: 12px; }
+        .progress-label { display: flex; justify-content: font-size; font-size: 11px; font-weight: 600; color: #334155; margin-bottom: 4px; }
+        .progress-bar-bg { width: 100%; background: #e2e8f0; border-radius: 6px; height: 12px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; width: 0%; background: #2563eb; border-radius: 6px; transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .progress-bar-fill.green { background: #10b981; }
 
         .logs-section h3 { font-size: 14px; margin-bottom: 8px; color: #334155; }
-        .log-list { list-style: none; padding: 0; margin: 0; max-height: 200px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; }
-        .log-item { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; font-size: 12px; display: flex; justify-content: space-between; align-items: center; background: #fff; }
+        .log-list { list-style: none; padding: 0; margin: 0; max-height: 180px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; }
+        .log-item { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; font-size: 11px; display: flex; justify-content: space-between; align-items: center; background: #fff; }
         .log-item:last-child { border-bottom: none; }
-        .time-tag { color: #64748b; font-size: 10px; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; }
+        .time-tag { color: #64748b; font-size: 9px; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; }
+        
         .btn { background: #2563eb; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; }
+        .btn-success { background: #10b981; }
         .btn-danger { background: #ef4444; margin-top: 10px; }
         .btn-secondary { background: #475569; margin-top: 10px; }
         .input-field { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; box-sizing: border-box; margin-bottom: 10px; outline: none; }
@@ -56,7 +60,6 @@
 </head>
 <body>
 
-    <!-- Login Box -->
     <div id="login-sec" class="login-box">
         <h2>🔒 Admin Access Protected</h2>
         <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">Please enter your admin PIN to view stats.</p>
@@ -64,7 +67,6 @@
         <button class="btn" onclick="checkPassword()">Login to Dashboard</button>
     </div>
 
-    <!-- Main Dashboard Section -->
     <div id="dashboard-sec" class="dashboard-container">
         <h2>
             📊 Live Analytics 
@@ -82,24 +84,38 @@
             </div>
         </div>
 
-        <!-- Unique Visual Activity Graph -->
-        <div class="graph-section">
-            <div class="graph-title">📈 Click Activity Visualizer</div>
-            <div class="graph-bars" id="graph-bars-container">
-                <!-- Dynamic bars will load here -->
+        <div class="chart-section">
+            <div class="chart-title">
+                <span>📈 Conversion Activity Chart</span>
+                <span id="conversion-rate" style="color: #2563eb;">0% Conv.</span>
+            </div>
+            
+            <div class="progress-bar-container">
+                <div class="progress-label"><span>Total Visits Ratio</span></div>
+                <div class="progress-bar-bg">
+                    <div id="bar-visits" class="progress-bar-fill"></div>
+                </div>
+            </div>
+
+            <div class="progress-bar-container" style="margin-bottom: 0;">
+                <div class="progress-label"><span>Button Clicks Conversion</span></div>
+                <div class="progress-bar-bg">
+                    <div id="bar-clicks" class="progress-bar-fill green"></div>
+                </div>
             </div>
         </div>
 
         <div class="logs-section">
-            <h3>Recent Click Activity (With Timestamp)</h3>
+            <h3>Recent Click Activity (With Device & Time)</h3>
             <ul id="log-list" class="log-list">
                 <li class="log-item" style="color: #94a3b8; text-align: center; display: block;">No clicks recorded yet.</li>
             </ul>
         </div>
 
-        <!-- Password Change Section -->
+        <button class="btn btn-success" onclick="exportToCSV()" style="margin-top: 15px;">📥 Download Report as Excel/CSV</button>
+
         <div class="settings-box">
-            <div class="graph-title" style="margin-bottom: 8px;">Change Admin PIN</div>
+            <div class="chart-title" style="margin-bottom: 8px;"><span>Change Admin PIN</span></div>
             <input type="password" id="new-pass" class="input-field" placeholder="Enter new 4-digit PIN" style="margin-bottom: 8px;" />
             <button class="btn btn-secondary" onclick="changePassword()" style="margin-top: 0;">Update Password</button>
         </div>
@@ -136,27 +152,25 @@
             var todayDate = new Date().toLocaleDateString();
             document.getElementById('current-date-tag').innerText = todayDate;
 
-            var visits = localStorage.getItem('total_visits') || 0;
+            var visits = parseInt(localStorage.getItem('total_visits') || '0');
             var clicks = JSON.parse(localStorage.getItem('click_logs') || '[]');
 
             document.getElementById('visit-count').innerText = visits;
             document.getElementById('click-count').innerText = clicks.length;
 
-            // Generate Unique Visual Graph Bars based on clicks
-            var graphContainer = document.getElementById('graph-bars-container');
-            graphContainer.innerHTML = '';
-            
-            // Let's create last 5 slots representation
-            var maxVal = Math.max(clicks.length, 5);
-            for(var i = 1; i <= 5; i++) {
-                var barHeight = (clicks.length >= i) ? (i * 20) : 8; // dummy visual scale
-                if(clicks.length === 0) barHeight = 4;
-                
-                var col = document.createElement('div');
-                col.className = 'bar-col';
-                col.innerHTML = '<div class="bar" style="height: ' + barHeight + 'px;"></div><span class="bar-label">T' + i + '</span>';
-                graphContainer.appendChild(col);
-            }
+            // Calculate Conversion Rate percentage
+            var convRate = visits > 0 ? Math.round((clicks.length / visits) * 100) : 0;
+            document.getElementById('conversion-rate').innerText = convRate + "% Conv.";
+
+            // Animate Chart Bars dynamically
+            setTimeout(function() {
+                var maxScale = Math.max(visits, 20); // Scale base
+                var visitWidth = Math.min(100, (visits / maxScale) * 100);
+                var clickWidth = Math.min(100, (clicks.length / maxScale) * 100);
+
+                document.getElementById('bar-visits').style.width = visitWidth + '%';
+                document.getElementById('bar-clicks').style.width = clickWidth + '%';
+            }, 300);
 
             var listEl = document.getElementById('log-list');
             listEl.innerHTML = '';
@@ -169,9 +183,25 @@
             clicks.reverse().forEach(function(item) {
                 var li = document.createElement('li');
                 li.className = 'log-item';
-                li.innerHTML = '<span>🚀 User Clicked Button</span> <span class="time-tag">' + item + '</span>';
+                li.innerHTML = '<span>📱 Click Log</span> <span class="time-tag">' + item + '</span>';
                 listEl.appendChild(li);
             });
+        }
+
+        function exportToCSV() {
+            var clicks = JSON.parse(localStorage.getItem('click_logs') || '[]');
+            if(clicks.length === 0) {
+                alert("No data available to export!");
+                return;
+            }
+            var csvContent = "data:text/csv;charset=utf-8,Click Timestamp & Device\n" + clicks.join("\n");
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "traffic_report.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         function clearData() {
