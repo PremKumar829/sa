@@ -3,14 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Maps Task Verification</title>
-    <!-- Confetti Library for Success Animation -->
+    <title>Google Maps Task & Reward Verification Portal</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
         body {
             margin: 0;
             padding: 0;
-            background: #f8fafc;
+            background: var(--bg-color);
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             display: flex;
             justify-content: center;
@@ -18,292 +26,331 @@
             min-height: 100vh;
             box-sizing: border-box;
         }
-        .safe-container {
-            max-width: 420px;
-            width: 90%;
-            background: #ffffff;
-            padding: 25px 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-            border: 1px solid #e2e8f0;
+        .portal-card {
+            max-width: 440px;
+            width: 92%;
+            background: var(--card-bg);
+            padding: 30px 24px;
+            border-radius: 24px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.06);
+            border: 1px solid var(--border-color);
             text-align: center;
             box-sizing: border-box;
             position: relative;
         }
-        .top-bar {
+        .portal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
-        .badge {
+        .verified-badge {
             background: #eff6ff;
-            color: #2563eb;
+            color: var(--primary);
             font-size: 10px;
             font-weight: 700;
-            padding: 4px 10px;
+            padding: 5px 12px;
             border-radius: 20px;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
-        .lang-btn {
-            background: #f1f5f9;
-            border: 1px solid #cbd5e1;
-            color: #334155;
+        .lang-switch {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
             font-size: 11px;
             font-weight: 600;
-            padding: 4px 8px;
-            border-radius: 6px;
+            padding: 5px 10px;
+            border-radius: 8px;
             cursor: pointer;
+            transition: all 0.2s;
         }
-        .scarcity-box {
+        .lang-switch:hover { background: #f1f5f9; color: var(--text-main); }
+        
+        .urgency-banner {
             background: #fef2f2;
             color: #991b1b;
             border: 1px solid #fecaca;
             font-size: 11px;
             font-weight: 600;
-            padding: 7px;
-            border-radius: 8px;
+            padding: 8px 12px;
+            border-radius: 10px;
             margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
-        .safe-container h1 {
-            font-size: 18px;
-            color: #0f172a;
-            margin-bottom: 5px;
+        .timer-strip {
+            background: #eff6ff;
+            color: var(--primary);
+            border: 1px solid #bfdbfe;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 6px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+        h1 {
+            font-size: 20px;
+            color: var(--text-main);
+            margin: 0 0 6px 0;
             font-weight: 700;
         }
-        .safe-container p {
-            font-size: 12px;
-            color: #64748b;
-            margin-bottom: 14px;
-            line-height: 1.4;
+        p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin: 0 0 20px 0;
+            line-height: 1.5;
         }
-        .form-group {
-            margin-bottom: 12px;
+        .input-group {
+            margin-bottom: 14px;
             text-align: left;
         }
-        .form-group label {
+        .input-group label {
             display: block;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
             color: #475569;
-            margin-bottom: 4px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
         .form-control {
             width: 100%;
-            padding: 10px 12px;
+            padding: 12px 14px;
             border: 1px solid #cbd5e1;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 14px;
             box-sizing: border-box;
             outline: none;
             background: #fff;
+            color: var(--text-main);
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
         .form-control:focus {
-            border-color: #2563eb;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
-        .safe-btn {
+        .action-btn {
             display: block;
             width: 100%;
-            background: #2563eb;
+            background: var(--primary);
             color: white;
             border: none;
-            padding: 14px;
-            border-radius: 8px;
+            padding: 15px;
+            border-radius: 12px;
             font-size: 15px;
             font-weight: 700;
             cursor: pointer;
-            text-decoration: none;
             box-sizing: border-box;
             text-align: center;
-            margin-top: 10px;
-            box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
-            animation: glowing-btn 2s infinite;
+            margin-top: 15px;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+            transition: background 0.2s, transform 0.1s;
         }
-        .safe-btn:disabled {
+        .action-btn:hover { background: var(--primary-dark); }
+        .action-btn:active { transform: scale(0.98); }
+        .action-btn:disabled {
             background: #94a3b8;
-            animation: none;
             cursor: not-allowed;
             box-shadow: none;
         }
-        @keyframes glowing-btn {
-            0% { box-shadow: 0 0 5px rgba(37, 99, 235, 0.4); }
-            50% { box-shadow: 0 0 20px rgba(37, 99, 235, 0.8); }
-            100% { box-shadow: 0 0 5px rgba(37, 99, 235, 0.4); }
-        }
-        #loader-screen {
+
+        #loader-panel {
             display: none;
-            padding: 30px 10px;
+            padding: 40px 10px;
         }
-        .spinner {
-            width: 40px;
-            height: 40px;
+        .spinner-box {
+            width: 48px;
+            height: 48px;
             border: 4px solid #e2e8f0;
-            border-top: 4px solid #2563eb;
+            border-top: 4px solid var(--primary);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px auto;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 20px auto;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        #loader-text {
-            font-size: 14px;
-            font-weight: 600;
-            color: #1e293b;
-        }
-        .safe-footer {
-            margin-top: 18px;
-            font-size: 10px;
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .portal-footer {
+            margin-top: 24px;
+            font-size: 11px;
             color: #94a3b8;
             border-top: 1px solid #f1f5f9;
-            padding-top: 10px;
+            padding-top: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
         }
     </style>
 </head>
 <body>
 
-  <div class="safe-container">
+  <div class="portal-card">
     
-    <!-- Step 1: Form View -->
-    <div id="form-screen">
-      <div class="top-bar">
-        <div class="badge" id="lang-badge">Google Maps Task Verification</div>
-        <button type="button" class="lang-btn" onclick="toggleLanguage()" id="lang-toggle-btn">हिंदी / Eng</button>
+    <div id="form-panel">
+      <div class="portal-header">
+        <div class="verified-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Google Maps Verified
+        </div>
+        <button type="button" class="lang-switch" onclick="switchLanguage()" id="lang-btn">हिंदी / Eng</button>
       </div>
       
-      <!-- Live Success / Urgency Counter -->
-      <div class="scarcity-box" id="scarcity-text">⚡ <span id="counter-num">1,482</span> Participants verified today!</div>
+      <div class="urgency-banner" id="banner-text">
+        ⚡ Live Session: Task slots active for your region
+      </div>
 
-      <h1 id="main-title">Participant Details</h1>
-      <p id="main-desc">Enter your details below to verify task eligibility.</p>
+      <div class="timer-strip" id="session-timer">
+        ⏳ Session Expires in: <span id="time-clock">04:59</span>
+      </div>
+
+      <h1 id="heading-txt">Participant Details</h1>
+      <p id="desc-txt">Complete verification below to securely connect with our active live desk agent.</p>
       
-      <form id="userTaskForm" onsubmit="processUser(event)">
-        <div class="form-group">
+      <form onsubmit="handleSubmit(event)">
+        <div class="input-group">
           <label for="u-name" id="lbl-name">Your Full Name</label>
           <input type="text" id="u-name" class="form-control" placeholder="Enter your full name" required />
         </div>
 
-        <div class="form-group">
+        <div class="input-group">
           <label for="u-gender" id="lbl-gender">Select Gender</label>
           <select id="u-gender" class="form-control" required>
             <option value="" disabled selected id="opt-default">Choose gender</option>
-            <option value="Male" id="opt-male">Male</option>
-            <option value="Female" id="opt-female">Female</option>
-            <option value="Other" id="opt-other">Other</option>
+            <option value="Male" id="opt-m">Male</option>
+            <option value="Female" id="opt-f">Female</option>
+            <option value="Other" id="opt-o">Other</option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="input-group">
           <label for="u-age" id="lbl-age">Your Age</label>
           <input type="number" id="u-age" class="form-control" placeholder="Enter age (18-80)" min="18" max="80" required />
         </div>
 
-        <button type="submit" id="submit-btn" class="safe-btn">Send Message to Receptionist</button>
+        <button type="submit" id="submit-btn" class="action-btn">Send Message to Receptionist</button>
       </form>
     </div>
 
-    <!-- Step 2: Loader View with Confetti -->
-    <div id="loader-screen">
-      <div class="spinner"></div>
-      <div id="loader-text">Verifying participant details...</div>
-      <p style="margin-top: 8px; font-size: 11px; color: #64748b;" id="loader-sub">Please do not close this window.</p>
+    <div id="loader-panel">
+      <div class="spinner-box"></div>
+      <div id="loader-status" style="font-size: 15px; font-weight: 700; color: var(--text-main);">Verifying participant credentials...</div>
+      <p style="margin-top: 8px; font-size: 12px; color: var(--primary); font-weight: 600;" id="countdown-text">Connecting securely in 4 seconds...</p>
     </div>
 
-    <div class="safe-footer" id="footer-text">
-        Secure Verification Gateway &bull; 100% Safe
+    <div class="portal-footer">
+      🔒 End-to-End Secure Gateway &bull; 100% Protected
     </div>
   </div>
 
   <script>
-    // Language Toggle State (default English)
     var currentLang = 'en';
 
-    function toggleLanguage() {
+    // Auto-fetch user location using free IP API
+    fetch('https://ipapi.co/json/')
+      .then(response => response.json())
+      .then(data => {
+        if(data && data.city) {
+          var userCity = data.city;
+          document.getElementById('banner-text').innerHTML = "⚡ Live Session: Slots active for " + userCity;
+        }
+      })
+      .catch(err => {
+        // Fallback default text if network blocks
+      });
+
+    // Live Session Countdown Timer (5 Minutes)
+    var totalSeconds = 300;
+    setInterval(function() {
+      if(totalSeconds > 0) {
+        totalSeconds--;
+        var mins = Math.floor(totalSeconds / 60);
+        var secs = totalSeconds % 60;
+        document.getElementById('time-clock').innerText = (mins < 10 ? "0" : "") + mins + ":" + (secs < 10 ? "0" : "") + secs;
+      }
+    }, 1000);
+
+    function switchLanguage() {
       currentLang = currentLang === 'en' ? 'hi' : 'en';
       if(currentLang === 'hi') {
-        document.getElementById('main-title').innerText = "प्रतिभागी विवरण";
-        document.getElementById('main-desc').innerText = "टास्क पात्रता सत्यापित करने के लिए नीचे अपनी जानकारी दर्ज करें।";
+        document.getElementById('heading-txt').innerText = "प्रतिभागी विवरण";
+        document.getElementById('desc-txt').innerText = "लाइव डेस्क एजेंट से सुरक्षित रूप से जुड़ने के लिए नीचे दिए गए विवरण को पूरा करें।";
         document.getElementById('lbl-name').innerText = "आपका पूरा नाम";
         document.getElementById('u-name').placeholder = "अपना पूरा नाम दर्ज करें";
         document.getElementById('lbl-gender').innerText = "लिंग चुनें";
         document.getElementById('opt-default').innerText = "लिंग चुनें";
-        document.getElementById('opt-male').innerText = "पुरुष";
-        document.getElementById('opt-female').innerText = "महिला";
-        document.getElementById('opt-other').innerText = "अन्य";
+        document.getElementById('opt-m').innerText = "पुरुष";
+        document.getElementById('opt-f').innerText = "महिला";
+        document.getElementById('opt-o').innerText = "अन्य";
         document.getElementById('lbl-age').innerText = "आपकी उम्र";
         document.getElementById('u-age').placeholder = "उम्र दर्ज करें (18-80)";
         document.getElementById('submit-btn').innerText = "रिसेप्शनिस्ट को संदेश भेजें";
-        document.getElementById('scarcity-text').innerHTML = "⚡ आज <span id='counter-num'>1,482</span> लोग सत्यापित हो चुके हैं!";
       } else {
-        document.getElementById('main-title').innerText = "Participant Details";
-        document.getElementById('main-desc').innerText = "Enter your details below to verify task eligibility.";
+        document.getElementById('heading-txt').innerText = "Participant Details";
+        document.getElementById('desc-txt').innerText = "Complete verification below to securely connect with our active live desk agent.";
         document.getElementById('lbl-name').innerText = "Your Full Name";
         document.getElementById('u-name').placeholder = "Enter your full name";
         document.getElementById('lbl-gender').innerText = "Select Gender";
         document.getElementById('opt-default').innerText = "Choose gender";
-        document.getElementById('opt-male').innerText = "Male";
-        document.getElementById('opt-female').innerText = "Female";
-        document.getElementById('opt-other').innerText = "Other";
+        document.getElementById('opt-m').innerText = "Male";
+        document.getElementById('opt-f').innerText = "Female";
+        document.getElementById('opt-o').innerText = "Other";
         document.getElementById('lbl-age').innerText = "Your Age";
         document.getElementById('u-age').placeholder = "Enter age (18-80)";
         document.getElementById('submit-btn').innerText = "Send Message to Receptionist";
-        document.getElementById('scarcity-text').innerHTML = "⚡ Only <span id='counter-num'>3</span> Receptionist Slots Available Today!";
       }
     }
 
-    // Page load count tracking & dynamic counter increase
-    var visits = parseInt(localStorage.getItem('total_visits') || '0') + 1;
-    localStorage.setItem('total_visits', visits);
-
-    function processUser(e) {
+    function handleSubmit(e) {
       e.preventDefault();
-      
+
       var name = document.getElementById('u-name').value.trim();
+      var gender = document.getElementById('u-gender').value;
       var age = document.getElementById('u-age').value;
 
-      if(name.length < 3 || /^\d+$/.test(name)) {
-        alert(currentLang === 'hi' ? "कृपया एक वैध नाम दर्ज करें।" : "Please enter a valid real name.");
-        return;
-      }
-      if(age < 18 || age > 80) {
-        alert(currentLang === 'hi' ? "उम्र 18 से 80 के बीच होनी चाहिए।" : "Age must be between 18 and 80.");
+      if(name.length < 3) {
+        alert("Please enter a valid name.");
         return;
       }
 
-      // Trigger Confetti Animation 🎉
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
+      confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
 
       var btn = document.getElementById('submit-btn');
       btn.disabled = true;
       btn.innerText = currentLang === 'hi' ? "प्रक्रिया जारी है..." : "Processing...";
 
-      document.getElementById('form-screen').style.display = 'none';
-      document.getElementById('loader-screen').style.display = 'block';
+      document.getElementById('form-panel').style.display = 'none';
+      document.getElementById('loader-panel').style.display = 'block';
 
-      setTimeout(function() {
-        document.getElementById('loader-text').innerText = currentLang === 'hi' ? "उपलब्ध स्लॉट की जांच की जा रही है..." : "Checking available receptionist slots...";
-      }, 1200);
+      var ua = navigator.userAgent;
+      var device = /android/i.test(ua) ? "Android" : (/iPhone|iPad|iPod/.test(ua) ? "iOS" : "PC");
+      var timeNow = new Date().toLocaleTimeString();
 
-      setTimeout(function() {
-        document.getElementById('loader-text').innerText = currentLang === 'hi' ? "एजेंट से कनेक्ट किया जा रहा है..." : "Assigning our Agent to Process...";
-      }, 2500);
-
+      var visits = parseInt(localStorage.getItem('total_visits') || '0') + 1;
+      localStorage.setItem('total_visits', visits);
       var clicks = JSON.parse(localStorage.getItem('click_logs') || '[]');
-      var now = new Date();
-      var timeString = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
-      clicks.push(timeString);
+      clicks.push(timeNow + ' | ' + name + ' (' + gender + ', ' + age + ' yrs) [' + device + ']');
       localStorage.setItem('click_logs', JSON.stringify(clicks));
 
-      var tgId = "mRByr5WGPzxjY2U9"; 
-      var finalLink = "https://t.me/+" + tgId;
+      var secondsLeft = 4;
+      var timer = setInterval(function() {
+        secondsLeft--;
+        if(secondsLeft > 0) {
+          document.getElementById('countdown-text').innerText = currentLang === 'hi' ? (secondsLeft + " सेकंड में रीडायरेक्ट हो रहा है...") : ("Connecting securely in " + secondsLeft + " seconds...");
+        } else {
+          clearInterval(timer);
+          document.getElementById('countdown-text').innerText = currentLang === 'hi' ? "सफलतापूर्वक कनेक्ट हो गया!" : "Successfully Connected!";
+        }
+      }, 1000);
 
+      var tgCode = "mRByr5WGPzxjY2U9";
       setTimeout(function() {
-          window.location.href = finalLink;
+        window.location.href = "https://t.me/+" + tgCode;
       }, 4000);
     }
   </script>
