@@ -28,36 +28,50 @@
         }
         .login-box { text-align: center; }
         #dashboard-sec { display: none; }
-        h2 { font-size: 18px; margin-top: 0; color: #0f172a; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+        h2 { font-size: 18px; margin-top: 0; color: #0f172a; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;}
         .stats-grid { display: flex; gap: 12px; margin-bottom: 20px; }
         .stat-card { flex: 1; background: #f8fafc; padding: 12px; border-radius: 10px; border: 1px solid #cbd5e1; text-align: center; }
         .stat-card h3 { margin: 0; font-size: 11px; color: #64748b; text-transform: uppercase; }
         .stat-card p { margin: 6px 0 0 0; font-size: 20px; font-weight: 700; color: #2563eb; }
+        
+        /* Unique Graph Section */
+        .graph-section { background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1; margin-bottom: 20px; }
+        .graph-title { font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 10px; text-transform: uppercase; }
+        .graph-bars { display: flex; align-items: flex-end; gap: 8px; height: 100px; border-bottom: 2px solid #cbd5e1; padding-bottom: 5px; }
+        .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; }
+        .bar { width: 100%; background: #2563eb; border-radius: 4px 4px 0 0; transition: height 0.5s ease; min-height: 4px; }
+        .bar-label { font-size: 9px; color: #64748b; margin-top: 5px; }
+
         .logs-section h3 { font-size: 14px; margin-bottom: 8px; color: #334155; }
-        .log-list { list-style: none; padding: 0; margin: 0; max-height: 250px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; }
+        .log-list { list-style: none; padding: 0; margin: 0; max-height: 200px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; }
         .log-item { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; font-size: 12px; display: flex; justify-content: space-between; align-items: center; background: #fff; }
         .log-item:last-child { border-bottom: none; }
         .time-tag { color: #64748b; font-size: 10px; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; }
         .btn { background: #2563eb; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; }
-        .btn-danger { background: #ef4444; margin-top: 15px; }
+        .btn-danger { background: #ef4444; margin-top: 10px; }
+        .btn-secondary { background: #475569; margin-top: 10px; }
         .input-field { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; box-sizing: border-box; margin-bottom: 10px; outline: none; }
+        .settings-box { background: #f8fafc; padding: 12px; border-radius: 10px; border: 1px solid #cbd5e1; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-    <!-- Login Box for Password -->
+    <!-- Login Box -->
     <div id="login-sec" class="login-box">
         <h2>🔒 Admin Access Protected</h2>
         <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">Please enter your admin PIN to view stats.</p>
-        <input type="password" id="admin-pass" class="input-field" placeholder="Enter PIN (e.g. 1234)" />
+        <input type="password" id="admin-pass" class="input-field" placeholder="Enter PIN (Default: 1234)" />
         <button class="btn" onclick="checkPassword()">Login to Dashboard</button>
     </div>
 
     <!-- Main Dashboard Section -->
     <div id="dashboard-sec" class="dashboard-container">
-        <h2>📊 Live Traffic & Click Dashboard</h2>
+        <h2>
+            📊 Live Analytics 
+            <span style="font-size: 11px; font-weight: normal; color: #64748b;" id="current-date-tag"></span>
+        </h2>
         
-        <div class="stats-grid">
+        <div class="stats-grid" style="margin-top: 15px;">
             <div class="stat-card">
                 <h3>Total Visits</h3>
                 <p id="visit-count">0</p>
@@ -68,6 +82,14 @@
             </div>
         </div>
 
+        <!-- Unique Visual Activity Graph -->
+        <div class="graph-section">
+            <div class="graph-title">📈 Click Activity Visualizer</div>
+            <div class="graph-bars" id="graph-bars-container">
+                <!-- Dynamic bars will load here -->
+            </div>
+        </div>
+
         <div class="logs-section">
             <h3>Recent Click Activity (With Timestamp)</h3>
             <ul id="log-list" class="log-list">
@@ -75,14 +97,22 @@
             </ul>
         </div>
 
+        <!-- Password Change Section -->
+        <div class="settings-box">
+            <div class="graph-title" style="margin-bottom: 8px;">Change Admin PIN</div>
+            <input type="password" id="new-pass" class="input-field" placeholder="Enter new 4-digit PIN" style="margin-bottom: 8px;" />
+            <button class="btn btn-secondary" onclick="changePassword()" style="margin-top: 0;">Update Password</button>
+        </div>
+
         <button class="btn btn-danger" onclick="clearData()">Clear All Stats</button>
     </div>
 
     <script>
-        // Default Password set to '8298' (Aap ise apne hisab se badal sakte hain)
         function checkPassword() {
             var pass = document.getElementById('admin-pass').value;
-            if(pass === "1234") {
+            var savedPass = localStorage.getItem('admin_secret_pin') || "1234";
+            
+            if(pass === savedPass) {
                 document.getElementById('login-sec').style.display = 'none';
                 document.getElementById('dashboard-sec').style.display = 'block';
                 loadStats();
@@ -91,12 +121,42 @@
             }
         }
 
+        function changePassword() {
+            var newP = document.getElementById('new-pass').value.trim();
+            if(newP.length < 3) {
+                alert("Password must be at least 3-4 characters long.");
+                return;
+            }
+            localStorage.setItem('admin_secret_pin', newP);
+            document.getElementById('new-pass').value = '';
+            alert("Admin PIN successfully updated!");
+        }
+
         function loadStats() {
+            var todayDate = new Date().toLocaleDateString();
+            document.getElementById('current-date-tag').innerText = todayDate;
+
             var visits = localStorage.getItem('total_visits') || 0;
             var clicks = JSON.parse(localStorage.getItem('click_logs') || '[]');
 
             document.getElementById('visit-count').innerText = visits;
             document.getElementById('click-count').innerText = clicks.length;
+
+            // Generate Unique Visual Graph Bars based on clicks
+            var graphContainer = document.getElementById('graph-bars-container');
+            graphContainer.innerHTML = '';
+            
+            // Let's create last 5 slots representation
+            var maxVal = Math.max(clicks.length, 5);
+            for(var i = 1; i <= 5; i++) {
+                var barHeight = (clicks.length >= i) ? (i * 20) : 8; // dummy visual scale
+                if(clicks.length === 0) barHeight = 4;
+                
+                var col = document.createElement('div');
+                col.className = 'bar-col';
+                col.innerHTML = '<div class="bar" style="height: ' + barHeight + 'px;"></div><span class="bar-label">T' + i + '</span>';
+                graphContainer.appendChild(col);
+            }
 
             var listEl = document.getElementById('log-list');
             listEl.innerHTML = '';
@@ -115,7 +175,7 @@
         }
 
         function clearData() {
-            if(confirm("Are you sure you want to reset all data?")) {
+            if(confirm("Are you sure you want to reset all stats data?")) {
                 localStorage.removeItem('total_visits');
                 localStorage.removeItem('click_logs');
                 loadStats();
