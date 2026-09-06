@@ -34,12 +34,11 @@
         .stat-card h3 { margin: 0; font-size: 11px; color: #64748b; text-transform: uppercase; }
         .stat-card p { margin: 6px 0 0 0; font-size: 20px; font-weight: 700; color: #2563eb; }
         
-        /* Animated Chart Section */
         .chart-section { background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #cbd5e1; margin-bottom: 20px; }
         .chart-title { font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 12px; text-transform: uppercase; display: flex; justify-content: space-between; }
         
         .progress-bar-container { margin-bottom: 12px; }
-        .progress-label { display: flex; justify-content: font-size; font-size: 11px; font-weight: 600; color: #334155; margin-bottom: 4px; }
+        .progress-label { display: flex; font-size: 11px; font-weight: 600; color: #334155; margin-bottom: 4px; }
         .progress-bar-bg { width: 100%; background: #e2e8f0; border-radius: 6px; height: 12px; overflow: hidden; }
         .progress-bar-fill { height: 100%; width: 0%; background: #2563eb; border-radius: 6px; transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
         .progress-bar-fill.green { background: #10b981; }
@@ -114,8 +113,15 @@
 
         <button class="btn btn-success" onclick="exportToCSV()" style="margin-top: 15px;">📥 Download Report as Excel/CSV</button>
 
+        <!-- One-Click Destination Link Manager -->
         <div class="settings-box">
-            <div class="chart-title" style="margin-bottom: 8px;"><span>Change Admin PIN</span></div>
+            <div class="chart-title" style="margin-bottom: 8px;"><span>🔗 Telegram Destination Code/Link</span></div>
+            <input type="text" id="new-tg-code" class="input-field" placeholder="e.g. mRByr5WGPzxjY2U9" style="margin-bottom: 8px;" />
+            <button class="btn btn-secondary" onclick="updateTgLink()" style="margin-top: 0;">Update Destination Link</button>
+        </div>
+
+        <div class="settings-box">
+            <div class="chart-title" style="margin-bottom: 8px;"><span>🔒 Change Admin PIN</span></div>
             <input type="password" id="new-pass" class="input-field" placeholder="Enter new 4-digit PIN" style="margin-bottom: 8px;" />
             <button class="btn btn-secondary" onclick="changePassword()" style="margin-top: 0;">Update Password</button>
         </div>
@@ -135,6 +141,21 @@
             } else {
                 alert("Incorrect PIN! Access Denied.");
             }
+        }
+
+        function updateTgLink() {
+            var newCode = document.getElementById('new-tg-code').value.trim();
+            if(newCode.length < 3) {
+                alert("Please enter a valid Telegram code/hash.");
+                return;
+            }
+            // Clean up input if full link is pasted
+            if(newCode.includes("t.me/+")) {
+                newCode = newCode.split("t.me/+")[1].split("/")[0];
+            }
+            localStorage.setItem('target_tg_code', newCode);
+            document.getElementById('new-tg-code').value = '';
+            alert("Telegram Destination Link successfully updated!");
         }
 
         function changePassword() {
@@ -158,13 +179,11 @@
             document.getElementById('visit-count').innerText = visits;
             document.getElementById('click-count').innerText = clicks.length;
 
-            // Calculate Conversion Rate percentage
             var convRate = visits > 0 ? Math.round((clicks.length / visits) * 100) : 0;
             document.getElementById('conversion-rate').innerText = convRate + "% Conv.";
 
-            // Animate Chart Bars dynamically
             setTimeout(function() {
-                var maxScale = Math.max(visits, 20); // Scale base
+                var maxScale = Math.max(visits, 20);
                 var visitWidth = Math.min(100, (visits / maxScale) * 100);
                 var clickWidth = Math.min(100, (clicks.length / maxScale) * 100);
 
