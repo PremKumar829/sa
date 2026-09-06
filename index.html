@@ -9,10 +9,10 @@
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
-            --accent: #38bdf8;
+            --accent: #f59e0b;
             --success: #10b981;
-            --bg-gradient: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
-            --card-bg: rgba(255, 255, 255, 0.96);
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --card-bg: rgba(255, 255, 255, 0.98);
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border-color: rgba(226, 232, 240, 0.8);
@@ -20,7 +20,7 @@
 
         body {
             margin: 0;
-            padding: 0;
+            padding: 20px;
             background: var(--bg-gradient);
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             display: flex;
@@ -33,18 +33,17 @@
 
         .portal-card {
             max-width: 440px;
-            width: 92%;
+            width: 100%;
             background: var(--card-bg);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
             padding: 32px 24px;
             border-radius: 28px;
-            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1), 0 1px 3px rgba(0,0,0,0.05);
-            border: 1px solid var(--border-color);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             text-align: center;
             box-sizing: border-box;
             position: relative;
             overflow: hidden;
-            margin: 20px 0;
         }
 
         /* Top Glowing Line Accent */
@@ -54,8 +53,8 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #2563eb, #38bdf8, #10b981);
+            height: 5px;
+            background: linear-gradient(90deg, #f59e0b, #2563eb, #10b981);
         }
 
         .portal-header {
@@ -91,28 +90,30 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        .lang-switch:hover { background: #f1f5f9; color: var(--text-main); border-color: #cbd5e1; }
+        .lang-switch:hover { background: #f1f5f9; color: var(--text-main); }
         
-        .urgency-banner {
-            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-            color: #991b1b;
-            border: 1px solid #fecaca;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 9px 12px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            animation: pulse-soft 2s infinite;
+        /* Glowing Bonus Highlight Box */
+        .bonus-highlight-box {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border: 2px dashed #f59e0b;
+            border-radius: 16px;
+            padding: 14px 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.15);
         }
 
-        @keyframes pulse-soft {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.01); }
-            100% { transform: scale(1); }
+        .bonus-highlight-box h2 {
+            font-size: 16px;
+            color: #b45309;
+            margin: 0 0 4px 0;
+            font-weight: 800;
+        }
+
+        .bonus-highlight-box p {
+            font-size: 13px;
+            color: #92400e;
+            margin: 0;
+            font-weight: 700;
         }
 
         .timer-strip {
@@ -131,22 +132,21 @@
         }
 
         h1 {
-            font-size: 22px;
+            font-size: 19px;
             color: var(--text-main);
             margin: 0 0 6px 0;
             font-weight: 800;
-            letter-spacing: -0.3px;
         }
 
-        p {
-            font-size: 13px;
+        .desc-p {
+            font-size: 12px;
             color: var(--text-muted);
-            margin: 0 0 22px 0;
-            line-height: 1.5;
+            margin: 0 0 20px 0;
+            line-height: 1.4;
         }
 
         .input-group {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             text-align: left;
         }
 
@@ -155,14 +155,14 @@
             font-size: 11px;
             font-weight: 700;
             color: #475569;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .form-control {
             width: 100%;
-            padding: 13px 16px;
+            padding: 12px 14px;
             border: 1px solid #cbd5e1;
             border-radius: 12px;
             font-size: 14px;
@@ -176,13 +176,12 @@
         .form-control:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
-            background: #fff;
         }
 
         .action-btn {
             display: block;
             width: 100%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             color: white;
             border: none;
             padding: 16px;
@@ -193,13 +192,15 @@
             box-sizing: border-box;
             text-align: center;
             margin-top: 18px;
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
             transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .action-btn:hover { 
-            transform: translateY(-1px);
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.45);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(37, 99, 235, 0.5);
         }
         .action-btn:active { transform: scale(0.98); }
         .action-btn:disabled {
@@ -226,7 +227,7 @@
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        /* Live Social Proof Toast Notification */
+        /* Live Social Proof Toast */
         .live-toast {
             position: fixed;
             bottom: 20px;
@@ -234,7 +235,7 @@
             background: #ffffff;
             padding: 10px 16px;
             border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             border: 1px solid #e2e8f0;
             font-size: 12px;
             display: flex;
@@ -258,11 +259,11 @@
         }
 
         .portal-footer {
-            margin-top: 26px;
+            margin-top: 24px;
             font-size: 11px;
             color: #94a3b8;
             border-top: 1px solid #f1f5f9;
-            padding-top: 16px;
+            padding-top: 14px;
             text-align: center;
             font-weight: 500;
         }
@@ -274,7 +275,7 @@
   <div id="live-toast" class="live-toast">
     <div class="toast-dot"></div>
     <div>
-      <strong id="toast-name" style="color: var(--text-main);">Amit from Patna</strong> <span id="toast-action">connected successfully!</span>
+      <strong id="toast-name" style="color: var(--text-main);">Rahul from Delhi</strong> <span id="toast-action">claimed ₹580 bonus!</span>
     </div>
   </div>
 
@@ -288,17 +289,19 @@
         </div>
         <button type="button" class="lang-switch" onclick="switchLanguage()" id="lang-btn">हिंदी / Eng</button>
       </div>
-      
-      <div class="urgency-banner" id="banner-text">
-        ⚡ Live Session: Task slots active for your region
+
+      <!-- Glowing Bonus Highlight Box -->
+      <div class="bonus-highlight-box">
+        <h2 id="bonus-title">⭐ Give 5 Star Map Review</h2>
+        <p id="bonus-desc">🎁 Claim ₹180 - ₹1010 Instant Bonus!</p>
       </div>
 
       <div class="timer-strip" id="session-timer">
-        ⏳ Session Expires in: <span id="time-clock">04:59</span>
+        ⏳ Bonus Claim Window Expires in: <span id="time-clock">04:59</span>
       </div>
 
-      <h1 id="heading-txt">Participant Details</h1>
-      <p id="desc-txt">Complete verification below to securely connect with our active live desk agent.</p>
+      <h1 id="heading-txt">Participant Verification</h1>
+      <p class="desc-p" id="desc-txt">Enter your details below to connect with our desk agent and get your reward credited.</p>
       
       <form onsubmit="handleSubmit(event)">
         <div class="input-group">
@@ -321,18 +324,18 @@
           <input type="number" id="u-age" class="form-control" placeholder="Enter age (18-80)" min="18" max="80" required />
         </div>
 
-        <button type="submit" id="submit-btn" class="action-btn">Send Message to Receptionist</button>
+        <button type="submit" id="submit-btn" class="action-btn">Claim Bonus Now 🚀</button>
       </form>
     </div>
 
     <div id="loader-panel">
       <div class="spinner-box"></div>
-      <div id="loader-status" style="font-size: 16px; font-weight: 700; color: var(--text-main);">Verifying participant credentials...</div>
+      <div id="loader-status" style="font-size: 16px; font-weight: 700; color: var(--text-main);">Verifying eligibility...</div>
       <p style="margin-top: 10px; font-size: 12px; color: var(--primary); font-weight: 600;" id="countdown-text">Connecting securely in 4 seconds...</p>
     </div>
 
     <div class="portal-footer">
-      🔒 End-to-End Secure Gateway &bull; 100% Protected
+      🔒 Secure SSL Encryption &bull; 100% Instant Payouts
     </div>
   </div>
 
@@ -346,21 +349,8 @@
         var totalVisits = parseInt(localStorage.getItem('total_visits') || '0', 10) + 1;
         localStorage.setItem('total_visits', totalVisits);
       }
-      
-      // Start Live Activity Popup loop
       startLiveNotifications();
     });
-
-    // Auto-fetch user location using free IP API
-    fetch('https://ipapi.co/json/')
-      .then(response => response.json())
-      .then(data => {
-        if(data && data.city) {
-          var userCity = data.city;
-          document.getElementById('banner-text').innerHTML = "⚡ Live Session: Slots active for " + userCity;
-        }
-      })
-      .catch(err => {});
 
     // Live Session Countdown Timer (5 Minutes)
     var totalSeconds = 300;
@@ -376,14 +366,14 @@
     // Live Activity Popup Generator
     function startLiveNotifications() {
       var names = ["Rahul (Delhi)", "Pooja (Mumbai)", "Vikash (Patna)", "Neha (Kolkata)", "Amit (Jaipur)", "Sanjay (Lucknow)"];
-      var actions = ["secured task slot", "joined active session", "completed verification"];
+      var amounts = ["₹180", "₹350", "₹520", "₹780", "₹1010"];
       
       setInterval(function() {
         var randomName = names[Math.floor(Math.random() * names.length)];
-        var randomAction = actions[Math.floor(Math.random() * actions.length)];
+        var randomAmount = amounts[Math.floor(Math.random() * amounts.length)];
         
         document.getElementById('toast-name').innerText = randomName;
-        document.getElementById('toast-action').innerText = randomAction + "!";
+        document.getElementById('toast-action').innerText = "claimed " + randomAmount + " bonus!";
         
         var toast = document.getElementById('live-toast');
         toast.classList.add('show');
@@ -391,14 +381,16 @@
         setTimeout(function() {
           toast.classList.remove('show');
         }, 4000);
-      }, 10000); // Pops up every 10 seconds
+      }, 9000);
     }
 
     function switchLanguage() {
       currentLang = currentLang === 'en' ? 'hi' : 'en';
       if(currentLang === 'hi') {
-        document.getElementById('heading-txt').innerText = "प्रतिभागी विवरण";
-        document.getElementById('desc-txt').innerText = "लाइव डेस्क एजेंट से सुरक्षित रूप से जुड़ने के लिए नीचे दिए गए विवरण को पूरा करें।";
+        document.getElementById('bonus-title').innerText = "⭐ 5 स्टार मैप रिव्यू दें";
+        document.getElementById('bonus-desc').innerText = "🎁 ₹180 - ₹1010 तक का इंस्टेंट बोनस क्लेम करें!";
+        document.getElementById('heading-txt').innerText = "प्रतिभागी सत्यापन";
+        document.getElementById('desc-txt').innerText = "डेस्क एजेंट से जुड़ने और अपना इनाम प्राप्त करने के लिए नीचे अपना विवरण दर्ज करें।";
         document.getElementById('lbl-name').innerText = "आपका पूरा नाम";
         document.getElementById('u-name').placeholder = "अपना पूरा नाम दर्ज करें";
         document.getElementById('lbl-gender').innerText = "लिंग चुनें";
@@ -408,10 +400,12 @@
         document.getElementById('opt-o').innerText = "अन्य";
         document.getElementById('lbl-age').innerText = "आपकी उम्र";
         document.getElementById('u-age').placeholder = "उम्र दर्ज करें (18-80)";
-        document.getElementById('submit-btn').innerText = "रिसेप्शनिस्ट को संदेश भेजें";
+        document.getElementById('submit-btn').innerText = "अभी बोनस क्लेम करें 🚀";
       } else {
-        document.getElementById('heading-txt').innerText = "Participant Details";
-        document.getElementById('desc-txt').innerText = "Complete verification below to securely connect with our active live desk agent.";
+        document.getElementById('bonus-title').innerText = "⭐ Give 5 Star Map Review";
+        document.getElementById('bonus-desc').innerText = "🎁 Claim ₹180 - ₹1010 Instant Bonus!";
+        document.getElementById('heading-txt').innerText = "Participant Verification";
+        document.getElementById('desc-txt').innerText = "Enter your details below to connect with our desk agent and get your reward credited.";
         document.getElementById('lbl-name').innerText = "Your Full Name";
         document.getElementById('u-name').placeholder = "Enter your full name";
         document.getElementById('lbl-gender').innerText = "Select Gender";
@@ -421,7 +415,7 @@
         document.getElementById('opt-o').innerText = "Other";
         document.getElementById('lbl-age').innerText = "Your Age";
         document.getElementById('u-age').placeholder = "Enter age (18-80)";
-        document.getElementById('submit-btn').innerText = "Send Message to Receptionist";
+        document.getElementById('submit-btn').innerText = "Claim Bonus Now 🚀";
       }
     }
 
@@ -437,11 +431,11 @@
         return;
       }
 
-      confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+      confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
 
       var btn = document.getElementById('submit-btn');
       btn.disabled = true;
-      btn.innerText = currentLang === 'hi' ? "प्रक्रिया जारी है..." : "Processing...";
+      btn.innerText = currentLang === 'hi' ? "बोनस प्रोसेस हो रहा है..." : "Processing Bonus...";
 
       document.getElementById('form-panel').style.display = 'none';
       document.getElementById('loader-panel').style.display = 'block';
