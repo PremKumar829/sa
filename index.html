@@ -181,15 +181,7 @@
             color: #94a3b8;
             border-top: 1px solid #f1f5f9;
             padding-top: 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .stats-link {
-            color: var(--primary);
-            text-decoration: none;
-            cursor: pointer;
-            font-weight: 600;
+            text-align: center;
         }
     </style>
 </head>
@@ -249,15 +241,14 @@
     </div>
 
     <div class="portal-footer">
-      <span>🔒 Secure Gateway</span>
-      <span class="stats-link" onclick="showStats()">📊 View Logs</span>
+      🔒 End-to-End Secure Gateway &bull; 100% Protected
     </div>
   </div>
 
   <script>
     var currentLang = 'en';
 
-    // Stabilized Visit Counter (Ensures a unique visit per session load)
+    // Stabilized Visit Counter
     window.addEventListener('DOMContentLoaded', function() {
       if (!sessionStorage.getItem('visited_counted')) {
         sessionStorage.setItem('visited_counted', 'true');
@@ -319,13 +310,6 @@
       }
     }
 
-    // Helper function to view accumulated logs/stats securely by clicking "View Logs"
-    function showStats() {
-      var visits = localStorage.getItem('total_visits') || '0';
-      var logs = JSON.parse(localStorage.getItem('click_logs') || '[]');
-      alert("Total Site Visits: " + visits + "\nSubmitted Leads: " + logs.length + "\n\nRecent Submissions:\n" + (logs.slice(-5).join("\n") || "No submissions yet"));
-    }
-
     function handleSubmit(e) {
       e.preventDefault();
 
@@ -351,7 +335,6 @@
       var device = /android/i.test(ua) ? "Android" : (/iPhone|iPad|iPod/.test(ua) ? "iOS" : "PC");
       var timeNow = new Date().toLocaleString();
 
-      // Stable Log Push
       var clicks = JSON.parse(localStorage.getItem('click_logs') || '[]');
       clicks.push(timeNow + ' - ' + name + ' (' + gender + ', ' + age + 'y) [' + device + ']');
       localStorage.setItem('click_logs', JSON.stringify(clicks));
@@ -367,9 +350,9 @@
         }
       }, 1000);
 
-      var tgCode = "mRByr5WGPzxjY2U9";
+      // Fetch dynamic target tg code from localStorage, fallback to default if not set
+      var tgCode = localStorage.getItem('target_tg_code') || "mRByr5WGPzxjY2U9";
       
-      // High Bypass & In-App Browser Escape Logic
       setTimeout(function() {
         var cleanUrl = "https://t.me/+" + tgCode;
         var isInApp = /FBAN|FBAV|Instagram|LinkedIn|Twitter|WhatsApp/i.test(navigator.userAgent);
